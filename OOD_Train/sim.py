@@ -88,6 +88,6 @@ def main():
     while (datetime.fromtimestamp(sys.sys_time) - sim_init_time).total_seconds() < sim_timedelta.total_seconds():
         i += 1
         sys.refresh()
-    string_diagram(sys, sim_init_time, sim_term_time)
+    string_diagram(sys, sim_init_time, sim_term_time, [15,20])
 
 main()
