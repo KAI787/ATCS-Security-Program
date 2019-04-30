@@ -1,6 +1,9 @@
 import random
 import numpy as np
 
+TRAIN_SPEED_CONTAINER = [0.02, 0.02, 0.03, 0.06, 0.04, 0.02, 0.02, 0.03, 0.02, 0.07, 0.08, 0.07, 0.06, 0.07, 0.06, 0.03, 0.07, 0.02, 0.07, 0.03, 0.06, 0.05, 0.03, 0.1, 0.06, 0.05, 0.09, 0.05, 0.03, 0.1, 0.07, 0.1, 0.03, 0.03, 0.03, 0.1, 0.03, 0.06, 0.1, 0.03, 0.04, 0.04, 0.05, 0.07, 0.07, 0.1, 0.04, 0.04, 0.09, 0.02] 
+TRAIN_INIT_TIME = []
+
 class Train():
     def __init__(self, idx, rank, blk_interval, init_time, curr_track):
         self.curr_pos = 0
