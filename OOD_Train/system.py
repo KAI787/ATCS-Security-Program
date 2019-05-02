@@ -32,7 +32,7 @@ class System():
 
 
     def generate_train(self, track_idx):
-        new_train = Train(self.train_num, self.train_num, self.block_intervals, self.sys_time, track_idx)
+        new_train = Train(self.train_num, self.train_num, self.sys_time, track_idx, self)
         self.trains.append(new_train)
         self.train_num += 1
         self.last_train_init_time = self.sys_time
