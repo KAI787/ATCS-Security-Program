@@ -46,4 +46,8 @@ class Block():
     def set_stop_speed(self):
         self.trgt_speed = 0
     
-    
+    def exist_train(self):
+        for tck in self.tracks:
+            if tck != None:
+                return True
+        return False
