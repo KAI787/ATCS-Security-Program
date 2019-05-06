@@ -15,13 +15,13 @@ class Train():
         self.curr_speed = self.max_speed if self.is_up else -self.max_speed
         self.acc = 0.001
         self.curr_acc = self.acc
-        self.curr_blk = 0
+        self.curr_blk = 0 if self.is_up else len(system.blocks) - 1
         self.status = 1
         self.train_idx = idx
         self.rank = rank
         self.system = system
         self.blk_time = [[init_time]]
-        self.time_pos_list = [[self.blk_time[0][0], self.system.block_intervals[0][0]]]  # not yet implemented interpolation
+        self.time_pos_list = [[init_time, self.curr_pos]]  # not yet implemented interpolation
         self.curr_track = curr_track
 
     def __lt__(self, other):

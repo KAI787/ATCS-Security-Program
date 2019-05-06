@@ -87,6 +87,7 @@ class System():
         if self.sys_time - self.last_up_train_init_time >= headway and self.blocks[0].has_available_track():
             track_idx = self.blocks[0].find_available_track()
             self.generate_new_train(track_idx, "UP")
+
         if self.sys_time - self.last_down_train_init_time >= headway and self.blocks[len(self.blocks) - 1].has_available_track():
             track_idx = self.blocks[-1].find_available_track()
             self.generate_new_train(track_idx, "DOWN")
