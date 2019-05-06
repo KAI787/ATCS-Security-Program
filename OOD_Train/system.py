@@ -50,6 +50,7 @@ class System():
 
     def update_block_trgt_speed(self):
         # update the trgt_speed of every block.
+        # 每个BLOCK在双向条件下会具有两个Target Speed，one for each direction
         for i in range(len(self.blocks) - 2,-1,-1):
             if i <= len(self.blocks) - 2 and not self.blocks[i + 1].has_available_track():
                 self.blocks[i].set_stop_speed()
@@ -73,6 +74,8 @@ class System():
                 self.blocks[i].set_clear_speed()
             
     def generate_train(self, headway):
+        # 生成火车的时候记得采用 train.TRAIN_SPEED_CONTAINER 常数列表里
+        # 生成好的随机数方便对比。
         if len(self.up_trains) == 0:
             track_idx = self.blocks[0].find_available_track()
             self.generate_new_train(track_idx, "UP")
@@ -90,12 +93,14 @@ class System():
             self.generate_new_train(track_idx, "DOWN")
 
     def refresh(self):
-        headway = 300#np.random.normal(exp_buffer, var_buffer)
+        headway = 300
+        #headway = np.random.normal(exp_buffer, var_buffer)
         # If the time slot between now and the time of last train generation
         # is bigger than headway, it will generate a new train at start point.
         self.generate_train(headway)
 
         # TODO: 火车更新顺序问题待讨论解决。
+        # TODO_2: 刷新逻辑待讨论解决。先UP后DOWN的遍历方法可能引入不必要的UP优先级高于DOWN的情况？？
         for t in self.up_trains:
             t.update_up(self.dos_pos)
         for t in self.down_trains:
@@ -129,3 +134,10 @@ class System():
             return self.multi_tracks_blk[idx + 1]
         else:
             return self.multi_tracks_blk[idx - 1]
+        
+if __name__ == '__main__':
+    sim_init_time = datetime.strptime('2018-01-10 10:00:00', "%Y-%m-%d %H:%M:%S")
+    sim_term_time = datetime.strptime('2018-01-10 11:30:00', "%Y-%m-%d %H:%M:%S")
+    sys = System(sim_init_time, [5] * 10, [1,1,1,2,1,1,2,1,1,1], dos_period=['2018-01-01 00:30:00', '2018-01-01 01:30:00'], dos_pos=-1)
+    print(list(zip(sys.block_intervals, [5] * 10)))
+    

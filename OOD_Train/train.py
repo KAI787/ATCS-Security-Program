@@ -5,6 +5,7 @@ TRAIN_SPEED_CONTAINER = [0.02, 0.02, 0.03, 0.06, 0.04, 0.02, 0.02, 0.03, 0.02, 0
 TRAIN_INIT_TIME = []
 
 class Train():
+    # TODO：system可以缩写成sys
     def __init__(self, idx, rank, init_time, curr_track, system, is_up):
         self.curr_pos = 0 if is_up else system.length
         self.max_speed = random.randint(2,10) / 100
