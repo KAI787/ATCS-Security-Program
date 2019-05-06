@@ -157,7 +157,7 @@ class Train():
             self.proceed()   
  
     def update_down(self, dos_pos=-1):
-        print(self.curr_pos)
+        # print(self.curr_pos)
         # update self.curr_pos
         # update self.curr_speed
         # if the train already at the end of the railway, do nothing. (no updates on (time,pos))
