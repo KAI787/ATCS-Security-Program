@@ -9,10 +9,11 @@ class Train():
     def __init__(self, idx, rank, init_time, curr_track, system, is_up):
         self.is_up = is_up
         self.curr_pos = 0 if self.is_up else system.length
-        self.max_speed = random.randint(2,10) / 100
+        sp = random.randint(2,10) / 100
+        self.max_speed = sp if self.is_up else -sp
         # The direction of train
         # IF the direction is up, the curr_speed is position, else negative.
-        self.curr_speed = self.max_speed if self.is_up else -self.max_speed
+        self.curr_speed = self.max_speed
         self.acc = 0.001
         self.curr_acc = self.acc
         self.curr_blk = 0 if self.is_up else len(system.blocks) - 1
@@ -49,7 +50,7 @@ class Train():
         self.status = 0
      
     def start(self):
-        self.curr_speed = self.max_speed if self.is_up else -self.max_speed
+        self.curr_speed = self.max_speed
         self.status = 1
     
     def terminate(self):
@@ -167,7 +168,7 @@ class Train():
  
     def update_down(self, dos_pos=-1):
         if self.rank == 0:
-            print(self.curr_pos)
+            print(self.curr_speed)
         # print(self.curr_pos)
         # update self.curr_pos
         # update self.curr_speed
