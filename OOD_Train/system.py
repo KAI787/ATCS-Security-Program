@@ -73,17 +73,17 @@ class System():
                 self.blocks[i].set_clear_speed()
             
     def generate_train(self, headway):
-        if len(self.up_trains) == 0:
-            track_idx = self.blocks[0].find_available_track()
-            self.generate_new_train(track_idx, "UP")
+        # if len(self.up_trains) == 0:
+        #     track_idx = self.blocks[0].find_available_track()
+        #     self.generate_new_train(track_idx, "UP")
 
         if len(self.down_trains) == 0:
             track_idx = self.blocks[-1].find_available_track()
             self.generate_new_train(track_idx, "DOWN")
 
-        if self.sys_time - self.last_up_train_init_time >= headway and self.blocks[0].has_available_track():
-            track_idx = self.blocks[0].find_available_track()
-            self.generate_new_train(track_idx, "UP")
+        # if self.sys_time - self.last_up_train_init_time >= headway and self.blocks[0].has_available_track():
+        #     track_idx = self.blocks[0].find_available_track()
+        #     self.generate_new_train(track_idx, "UP")
 
         if self.sys_time - self.last_down_train_init_time >= headway and self.blocks[len(self.blocks) - 1].has_available_track():
             track_idx = self.blocks[-1].find_available_track()
