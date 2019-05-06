@@ -6,12 +6,12 @@ TRAIN_INIT_TIME = []
 
 class Train():
     def __init__(self, idx, rank, init_time, curr_track, system, is_up):
-        self.curr_pos = 0 if is_up else system.length
-        self.max_speed = random.randint(2,10) / 100
-        # The direction of train
         self.is_up = is_up
+        self.curr_pos = 0 if self.is_up else system.length
+        self.max_speed = 0.05#random.randint(2,10) / 100
+        # The direction of train
         # IF the direction is up, the curr_speed is position, else negative.
-        self.curr_speed = self.max_speed if is_up else -self.max_speed
+        self.curr_speed = self.max_speed if self.is_up else -self.max_speed
         self.acc = 0.001
         self.curr_acc = self.acc
         self.curr_blk = 0
@@ -48,7 +48,7 @@ class Train():
         self.status = 0
      
     def start(self):
-        self.curr_speed = self.max_speed
+        self.curr_speed = self.max_speed if self.is_up else -self.max_speed
         self.status = 1
     
     def terminate(self):
@@ -96,7 +96,7 @@ class Train():
             stop_pos = self.system.block_intervals[self.curr_blk][0]
 
         self.system.blocks[blk_idx].free_track(self.curr_track)
-        self.blk_time[blk_idx].append(self.system.sys_time)
+        # self.blk_time[blk_idx].append(self.system.sys_time)
         # interpolate the time moment when the train leaves the system
         if blk_idx == len(self.system.blocks)-1:
             interpolate_time = (stop_pos - self.curr_pos) / self.curr_speed + self.system.sys_time
@@ -157,22 +157,23 @@ class Train():
             self.proceed()   
  
     def update_down(self, dos_pos=-1):
+        print(self.curr_pos)
         # update self.curr_pos
         # update self.curr_speed
         # if the train already at the end of the railway, do nothing. (no updates on (time,pos))
-        if self.curr_pos == self.system.block_intervals[0][0]:
+        if self.curr_pos <= self.system.block_intervals[0][0]:
             pass
         # If the train arrives at the end of all the blocks, the train will leave the system.
         elif self.curr_pos + self.curr_speed * self.system.refresh_time <= self.system.block_intervals[0][0]:
             self.leave_block(len(self.system.block_intervals) - 1, False)
             self.curr_blk = None
-            self.proceed(dest=self.system.block_intervals[0][0])
+            self.proceed(dest=0)
         # The train will still stay in current block in next refresh time, so continue the system.
         elif self.curr_pos + self.curr_speed * self.system.refresh_time > self.system.block_intervals[self.curr_blk][0]:
             self.proceed()
         # If the next block has no available tracks 
         # the train will stop at end of current block.
-        elif (not self.system.blocks[self.curr_blk+1].has_available_track()): 
+        elif (not self.system.blocks[self.curr_blk - 1].has_available_track()): 
             self.stop_at_block_end(False)
         # If or there is a dos at the end of current block
         # the train will stop at end of current block.
@@ -184,7 +185,7 @@ class Train():
             and self.rank < len(self.system.down_trains)- 1\
             and self.max_speed < self.system.down_trains[self.rank + 1].max_speed\
             and self.system.down_trains[self.rank + 1].curr_pos <=\
-                self.system.block_intervals[self.system.down_trains[self.rank].curr_blk - 1][0]\
+                self.system.block_intervals[self.system.down_trains[self.rank].curr_blk + 1][1]\
             and self.system.blocks[self.curr_blk].has_available_track():
                 self.stop_at_block_end(False)
         # double direction trains
@@ -198,9 +199,9 @@ class Train():
         # update the system info and the train info.
         elif self.curr_pos + self.curr_speed * self.system.refresh_time <= self.system.block_intervals[self.curr_blk][0]: 
             self.leave_block(self.curr_blk, False)
-            next_block_ava_track = self.system.blocks[self.curr_blk + 1].find_available_track()
-            self.enter_block(self.curr_blk+1, next_block_ava_track)
-            self.curr_blk += 1
+            next_block_ava_track = self.system.blocks[self.curr_blk -1].find_available_track()
+            self.enter_block(self.curr_blk-1, next_block_ava_track)
+            self.curr_blk -= 1
             self.proceed()
 
     '''

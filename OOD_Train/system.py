@@ -46,7 +46,7 @@ class System():
             new_train = Train(len(self.down_trains), len(self.down_trains), self.sys_time, track_idx, self, False)
             self.down_trains.append(new_train)
             self.last_down_train_init_time = self.sys_time
-            new_train.enter_block(len(self.blocks) - 1, track_idx)
+            new_train.enter_block(-1, track_idx)
 
     def update_block_trgt_speed(self):
         # update the trgt_speed of every block.
@@ -78,15 +78,20 @@ class System():
             self.generate_new_train(track_idx, "UP")
 
         if len(self.down_trains) == 0:
-            track_idx = self.blocks[len(self.blocks) - 1].find_available_track()
+            print("@@@@")
+            track_idx = self.blocks[-1].find_available_track()
             self.generate_new_train(track_idx, "DOWN")
 
         if self.sys_time - self.last_up_train_init_time >= headway and self.blocks[0].has_available_track():
             track_idx = self.blocks[0].find_available_track()
             self.generate_new_train(track_idx, "UP")
-
-        if self.sys_time - self.last_down_train_init_time >= headway and self.blocks[-1].has_available_track():
-            track_idx = self.blocks[len(self.blocks) - 1].find_available_track()
+        if self.sys_time - self.last_down_train_init_time == 900:
+            print(self.blocks[len(self.blocks) - 1].has_available_track())
+            # for blk in self.blocks:
+            #     print(blk.has_available_track())
+        if self.sys_time - self.last_down_train_init_time >= headway and self.blocks[len(self.blocks) - 1].has_available_track():
+            print("$$$$")
+            track_idx = self.blocks[-1].find_available_track()
             self.generate_new_train(track_idx, "DOWN")
 
     def refresh(self):
@@ -96,10 +101,17 @@ class System():
         self.generate_train(headway)
 
         # TODO: 火车更新顺序问题待讨论解决。
-        for t in self.up_trains:
-            t.update_up(self.dos_pos)
-        for t in self.down_trains:
-            t.update_down(self.dos_pos)
+        up_size = len(self.up_trains)
+        down_size = len(self.down_trains)
+        i = 0
+        j = 0
+        while i < up_size or j < down_size:
+            if i < up_size:
+                self.up_trains[i].update_up(self.dos_pos)
+                i += 1
+            if j < down_size:
+                self.down_trains[j].update_down(self.dos_pos)
+                j += 1
 
         self.up_trains.sort()
         self.down_trains.sort()

@@ -12,6 +12,7 @@ def string_diagram(sys, start_time, end_time):
     colors = ['red','green','blue','black','orange','cyan','magenta']
     color_num = len(colors)
     x = []; y = []; 
+    
     for i in range(len(sys.up_trains)-1):
         x.append([])
         y.append([])
@@ -20,15 +21,13 @@ def string_diagram(sys, start_time, end_time):
             y[i].append(sys.up_trains[i].time_pos_list[j][1])
             # x[i].append(sys.up_trains[i].time_pos_list[j][0])
             # y[i].append(sys.up_trains[i].time_pos_list[j][1])
+    print(len(sys.down_trains))
     for i in range(len(sys.down_trains)-1):
-        x.append([])
-        y.append([])
         for j in range(len(sys.down_trains[i].time_pos_list)-1):
             x[i].append(datetime.fromtimestamp(sys.down_trains[i].time_pos_list[j][0]))
             y[i].append(sys.down_trains[i].time_pos_list[j][1])
             # x[i].append(sys.down_trains[i].time_pos_list[j][0])
             # y[i].append(sys.down_trains[i].time_pos_list[j][1])
-
     y = [i for _,i in sorted(zip([i[0] for i in x], y))]
     x = sorted(x, key = lambda x: x[0])
     assert len(x) == len(y)
@@ -36,7 +35,6 @@ def string_diagram(sys, start_time, end_time):
     train_idx = list(range(len(x)))
     t_color = [colors[x.index(i)%color_num] for i in x]
     min_t, max_t = min([i[0] for i in x]), max([i[-1] for i in x])
-
 
     #plt.ion()
     plt.title('Result Analysis')
@@ -83,7 +81,7 @@ def string_diagram(sys, start_time, end_time):
         #assert len(x[n]) == len(y[n]) == t_color[n]
         plt.plot([mdates.date2num(i) for i in x[n]], y[n], color=t_color[n])
     plt.gca().axhspan(15,20,color='yellow',alpha=0.5)
-    plt.gca().axhspan(45,50,color='yellow',alpha=0.5)
+    plt.gca().axhspan(30,35,color='yellow',alpha=0.5)
     plt.show()
     #plt.ioff()
 
