@@ -13,16 +13,18 @@ def string_diagram(sys, start_time, end_time):
     color_num = len(colors)
     x = []; y = []; 
     
-    for i in range(len(sys.up_trains)-1):
-        x.append([])
-        y.append([])
-        for j in range(len(sys.up_trains[i].time_pos_list)-1):
-            x[i].append(datetime.fromtimestamp(sys.up_trains[i].time_pos_list[j][0]))
-            y[i].append(sys.up_trains[i].time_pos_list[j][1])
-            # x[i].append(sys.up_trains[i].time_pos_list[j][0])
-            # y[i].append(sys.up_trains[i].time_pos_list[j][1])
+    # for i in range(len(sys.up_trains)-1):
+    #     x.append([])
+    #     y.append([])
+    #     for j in range(len(sys.up_trains[i].time_pos_list)-1):
+    #         x[i].append(datetime.fromtimestamp(sys.up_trains[i].time_pos_list[j][0]))
+    #         y[i].append(sys.up_trains[i].time_pos_list[j][1])
+    #         # x[i].append(sys.up_trains[i].time_pos_list[j][0])
+    #         # y[i].append(sys.up_trains[i].time_pos_list[j][1])
     print(len(sys.down_trains))
     for i in range(len(sys.down_trains)-1):
+        x.append([])
+        y.append([])
         for j in range(len(sys.down_trains[i].time_pos_list)-1):
             x[i].append(datetime.fromtimestamp(sys.down_trains[i].time_pos_list[j][0]))
             y[i].append(sys.down_trains[i].time_pos_list[j][1])
